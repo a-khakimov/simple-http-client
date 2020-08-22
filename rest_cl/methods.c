@@ -20,7 +20,6 @@ void systemInfo(char* result)
     const char* jsonstr = json_object_to_json_string_ext(jobj, JSON_C_TO_STRING_PRETTY);
     strcpy(result, jsonstr);
     json_object_put(jobj);
-    json_object_put(params);
 }
 
 /* For example */
@@ -39,7 +38,6 @@ void hardwareInfo(char* result)
     const char* jsonstr = json_object_to_json_string_ext(jobj, JSON_C_TO_STRING_PRETTY);
     strcpy(result, jsonstr);
     json_object_put(jobj);
-    json_object_put(params);
 }
 
 typedef struct {

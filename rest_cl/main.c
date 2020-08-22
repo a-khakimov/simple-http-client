@@ -11,6 +11,8 @@ static const char* const defaultUrl = "http://localhost:8000/api/json/v2";
 void usage(const char* prog)
 {
     printf("Usage:\n%s\n", prog);
+    printf("\t -h  Print usage\n");
+    printf("\t -v  Verbose\n");
     printf("\t -u [url]");
     printf("\tDefault URL: %s \n", defaultUrl);
     printf("\t -m [method name]\n");
@@ -24,7 +26,7 @@ int main(int argc, char** argv)
     memset(methodName, 0, sizeof(methodName));
 
     char url[256];
-    memset(methodName, 0, sizeof(methodName));
+    memset(url, 0, sizeof(methodName));
 
     int opt;
     while ((opt = getopt(argc, argv, "m:u:vh")) != -1){
@@ -52,21 +54,26 @@ int main(int argc, char** argv)
     }
 
     if (strlen(url) == 0) {
-        strcpy(methodName, defaultUrl);
+        strncpy(url, defaultUrl, sizeof(url) - 1);
     }
 
     char data[512];
     memset(data, 0, sizeof(data));
     doMethodByName(methodName, data);
-    if (strlen(data) == 0) {
+    const size_t dataLen = strlen(data);
+    if (dataLen == 0) {
         fprintf(stderr, "Method '%s' not exist. Possible methods:\n", methodName);
         printMethodsList();
         return EXIT_FAILURE;
     }
 
-    const long code = sendPOST(url, data, strlen(data));
+    const long code = sendPOST(url, data, dataLen);
     if (code != 201) {
-        fprintf(stderr, "Error sendPOST(): %s\n", (code == -1) ? "Inernal error" : "");
+        fprintf(stderr, "Error sendPOST(): ");
+        if (code == -1)
+            fprintf(stderr, "Internal error\n");
+        else
+            fprintf(stderr, "Request error code [%ld]\n", code);
     } else {
         printf("Ok!\n");
     }
