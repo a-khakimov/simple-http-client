@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.5)
+project(Client LANGUAGES C)
+add_executable(Client main.c sysinfo.c hardwareinfo.c methods.c httprequest.c)
+set_property(TARGET Client PROPERTY C_STANDARD 99)
+target_link_libraries(Client -lcurl)
+target_link_libraries(Client -ljson-c)
