@@ -43,7 +43,7 @@ class RequestHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         if self.path != "/api/json/v2":
             self.send_response(404)
-            return 
+            return
 
         content_length = int(self.headers['Content-Length'])
         content = self.rfile.read(content_length)
@@ -54,6 +54,9 @@ class RequestHandler(BaseHTTPRequestHandler):
             params = jsonContent["params"]
             db.update(db, id, method, params)
             self.send_response(201)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(content)
         except (KeyError, json.decoder.JSONDecodeError):
             self.send_response(404, "JSON Error")
 
