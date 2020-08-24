@@ -26,7 +26,7 @@ int main(int argc, char** argv)
     memset(methodName, 0, sizeof(methodName));
 
     char url[256];
-    memset(url, 0, sizeof(methodName));
+    memset(url, 0, sizeof(url));
 
     int opt;
     while ((opt = getopt(argc, argv, "m:u:vh")) != -1){
